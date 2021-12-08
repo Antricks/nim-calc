@@ -3,11 +3,17 @@ import math, strutils, parseutils
 const OPERATORS = ["+", "-", "*", "/", "%", "mod", "^", "pow"]
 
 proc eval*(input: string): float {.noSideEffect, extern: "evalMath".} =
+    ##[
+        Evaluates `input` as a basic mathematical term.
+        Following operators are allowed:
+            `+`, `-`, `*`, `/`, `%`, `mod`, `^`, `pow`
+    ]##
+
     var
         operator: string
         a: string
         b: string 
-        res: float = -99999
+        res: float
 
     for op in OPERATORS:
         if input.contains(op):
