@@ -1,9 +1,10 @@
-nimcache/
-nimblecache/
-htmldocs/
 
 *
 
-!*.nim
-!*.md
+!*.*
 !.*
+!*/
+
+nimcache/
+nimblecache/
+htmldocs/
