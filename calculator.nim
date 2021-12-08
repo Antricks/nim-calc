@@ -47,14 +47,21 @@ proc eval*(input: string): float {.noSideEffect, extern: "evalMath".} =
 
 
 when isMainModule:
+    proc bye() {.noconv.} =
+        echo "Bye, bye!"
+        quit(0)
+    
+    setControlCHook(bye)
+
+
     var input: string
+    
     while true:
         stdout.write(">>> ")
         
         try:
             input = stdin.readLine()
         except Exception:
-            echo "Bye, bye!"
-            quit(0)
+            bye()
 
         echo eval(input)
