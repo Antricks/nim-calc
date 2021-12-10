@@ -2,7 +2,7 @@ import math, strutils, parseutils
 
 const OPERATORS = ["+", "-", "*", "/", "%", "mod", "^", "pow"]
 
-func eval*(input: string): float {.noSideEffect, extern: "evalMath".} =
+func eval*(input: string): float {.extern: "evalMath".} =
     ##[
         Evaluates `input` as a basic mathematical term.
         Following operators are allowed:
