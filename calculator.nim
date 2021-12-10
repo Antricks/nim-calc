@@ -2,7 +2,7 @@ import math, strutils, parseutils
 
 const OPERATORS = ["+", "-", "*", "/", "%", "mod", "^", "pow"]
 
-proc eval*(input: string): float {.noSideEffect, extern: "evalMath".} =
+func eval*(input: string): float {.noSideEffect, extern: "evalMath".} =
     ##[
         Evaluates `input` as a basic mathematical term.
         Following operators are allowed:
@@ -21,7 +21,7 @@ proc eval*(input: string): float {.noSideEffect, extern: "evalMath".} =
             let opLoc = input.find(op)
             
             a = input[0..opLoc-1].strip
-            b = input[opLoc+op.len..high(input)].strip
+            b = input[opLoc+op.len..^1].strip
 
             break
 
@@ -37,7 +37,7 @@ proc eval*(input: string): float {.noSideEffect, extern: "evalMath".} =
     of "%", "mod":
         res = eval(a) mod eval(b)
     of "^", "pow":
-        res = pow(eval(a), eval(b))
+        res = eval(a).pow eval(b)
     else:
         case input.strip.toLower
         of "pi":
