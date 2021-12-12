@@ -1,3 +1,3 @@
 # nim-cli-calculator
 
-Just a basic calculatior, this time in nim
+Just a basic calculator exporting a method to evaluate mathematical terms for library use.
