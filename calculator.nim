@@ -1,14 +1,14 @@
 import math, strutils, parseutils, tables
 
 const OPERATORS = {
-    "+": func(a: float, b: float): float = a + b,
-    "-": func(a: float, b: float): float = a - b,
-    "*": func(a: float, b: float): float = a * b,
-    "/": func(a: float, b: float): float = a / b,
-    "%": func(a: float, b: float): float = a mod b,
-    "mod": func(a: float, b: float): float = a mod b,
-    "^": func(a: float, b: float): float = a.pow(b),
-    "pow": func(a: float, b: float): float = a.pow(b)
+    "+":    func(a: float, b: float): float = a + b,
+    "-":    func(a: float, b: float): float = a - b,
+    "*":    func(a: float, b: float): float = a * b,
+    "/":    func(a: float, b: float): float = a / b,
+    "%":    func(a: float, b: float): float = a mod b,
+    "mod":  func(a: float, b: float): float = a mod b,
+    "^":    func(a: float, b: float): float = a.pow(b),
+    "pow":  func(a: float, b: float): float = a.pow(b)
 }.toTable
 
 const CONSTANTS = {
