@@ -43,7 +43,7 @@ const
         "tau": TAU
     }.toTable
 
-func evalTerm*(input: string): float {.extern: "evalMath".} =
+func evalTerm*(input: string): float {.extern: "evalTerm".} =
     ##[
         Evaluates `input` as a basic mathematical term.
         Following operators are allowed:
