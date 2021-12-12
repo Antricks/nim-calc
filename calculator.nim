@@ -1,6 +1,21 @@
-import math, strutils, parseutils
+import math, strutils, parseutils, tables
 
-const OPERATORS = ["+", "-", "*", "/", "%", "mod", "^", "pow"]
+const OPERATORS = {
+    "+": func(a: float, b: float): float = a + b,
+    "-": func(a: float, b: float): float = a - b,
+    "*": func(a: float, b: float): float = a * b,
+    "/": func(a: float, b: float): float = a / b,
+    "%": func(a: float, b: float): float = a mod b,
+    "mod": func(a: float, b: float): float = a mod b,
+    "^": func(a: float, b: float): float = a.pow(b),
+    "pow": func(a: float, b: float): float = a.pow(b)
+}.toTable
+
+const CONSTANTS = {
+    "pi": PI,
+    "e": E,
+    "tau": TAU
+}.toTable
 
 func eval*(input: string): float {.extern: "evalMath".} =
     ##[
@@ -10,12 +25,12 @@ func eval*(input: string): float {.extern: "evalMath".} =
     ]##
 
     var
-        operator: string
+        operator: string = ""
         a: string
         b: string 
         res: float
 
-    for op in OPERATORS:
+    for op in OPERATORS.keys:
         if input.contains(op):
             operator = op
             let opLoc = input.find(op)
@@ -25,30 +40,19 @@ func eval*(input: string): float {.extern: "evalMath".} =
 
             break
 
-    case operator
-    of "+":
-        res = eval(a) + eval(b)
-    of "-":
-        res = eval(a) - eval(b)
-    of "*":
-        res = eval(a) * eval(b)
-    of "/":
-        res = eval(a) / eval(b)
-    of "%", "mod":
-        res = eval(a) mod eval(b)
-    of "^", "pow":
-        res = eval(a).pow eval(b)
-    else:
-        case input.strip.toLower
-        of "pi":
-            res = PI
-        of "e":
-            res = E
-        of "tau":
-            res = TAU
-        else:
-            discard input.parseFloat(res)
-    
+    block getResult:
+        for op, function in OPERATORS.pairs:
+            if op == operator:
+                res = function(eval(a), eval(b))
+                break getResult
+
+        for c in CONSTANTS.keys:
+            if c == input.strip.toLower:
+                res = CONSTANTS[input.strip.toLower]
+                break getResult
+        
+        discard input.parseFloat(res)
+
     return res
 
 
