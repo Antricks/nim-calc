@@ -42,7 +42,7 @@ const
         "tau": TAU
     }.toTable
 
-func eval*(input: string): float {.extern: "evalMath".} =
+func evalTerm*(input: string): float {.extern: "evalMath".} =
     ##[
         Evaluates `input` as a basic mathematical term.
         Following operators are allowed:
@@ -68,7 +68,7 @@ func eval*(input: string): float {.extern: "evalMath".} =
     block getResult:
         for op, function in OPERATORS.pairs:
             if op == operator:
-                res = function(eval(a), eval(b))
+                res = function(a.evalTerm, b.evalTerm)
                 break getResult
 
         for c in CONSTANTS.keys:
@@ -99,4 +99,4 @@ when isMainModule:
         except Exception:
             bye()
 
-        echo eval(input)
+        echo input.evalTerm
