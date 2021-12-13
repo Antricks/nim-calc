@@ -2,12 +2,6 @@
 
 A calculator exporting a function to evaluate basic mathematical terms
 
-## Types
-
-```nim
-ParseError = object of CatchableError
-```
-
 ## Procs
 
 ```nim
