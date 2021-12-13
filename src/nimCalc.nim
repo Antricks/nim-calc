@@ -25,16 +25,20 @@ SOFTWARE.
 import math, strutils, tables
 from parseutils import parseFloat
 
+## A calculator exporting a function to evaluate basic mathematical terms
+
+type ParseError* = object of CatchableError ## An error while parsing
+
 const
     OPERATORS = {
-        "+":    func(a: float, b: float): float = a + b,
-        "-":    func(a: float, b: float): float = a - b,
-        "*":    func(a: float, b: float): float = a * b,
-        "/":    func(a: float, b: float): float = a / b,
-        "%":    func(a: float, b: float): float = a mod b,
-        "mod":  func(a: float, b: float): float = a mod b,
-        "^":    func(a: float, b: float): float = a.pow(b),
-        "pow":  func(a: float, b: float): float = a.pow(b)
+        "+": func(a: float, b: float): float = a + b,
+        "-": func(a: float, b: float): float = a - b,
+        "*": func(a: float, b: float): float = a * b,
+        "/": func(a: float, b: float): float = a / b,
+        "%": func(a: float, b: float): float = a mod b,
+        "mod": func(a: float, b: float): float = a mod b,
+        "^": func(a: float, b: float): float = a.pow(b),
+        "pow": func(a: float, b: float): float = a.pow(b)
     }.toTable
 
     CONSTANTS = {
@@ -43,11 +47,18 @@ const
         "tau": TAU
     }.toTable
 
+
 func evalTerm*(input: string): float {.extern: "evalTerm".} =
     ##[
-        Evaluates `input` as a basic mathematical term.
-        Following operators are allowed:
-            `+`, `-`, `*`, `/`, `%`, `mod`, `^`, `pow`
+        Evaluates the string `input` as a basic mathematical term.
+
+        * Following **operators** can be used: `+`, `-`, `*`, `/`, `%`, `mod`, `^`, `pow`
+
+          (Where `%` and `mod` are equivalent and `^` and `pow` are equivalent)
+
+        * Following **constants** can be used: `PI`, `E`, `TAU`
+
+        **Note**: Brackets are not yet implemented but are WIP
     ]##
 
     var
@@ -56,28 +67,35 @@ func evalTerm*(input: string): float {.extern: "evalTerm".} =
         b: string 
         res: float
 
+    let term: string = input.strip.toLower
+
     for op in OPERATORS.keys:
-        if input.contains(op):
+        if term.contains(op):
             operator = op
-            let opLoc = input.find(op)
+            let opPos = term.find(op)
             
-            a = input[0..opLoc-1].strip
-            b = input[opLoc+op.len..^1].strip
+            a = term[0..opPos-1].strip
+            b = term[opPos+op.len..^1].strip
 
             break
 
-    block getResult:
+    block evaluate:
+        # no brackets
         for op, function in OPERATORS.pairs:
             if op == operator:
                 res = function(a.evalTerm, b.evalTerm)
-                break getResult
+                break evaluate
 
+        # no operators
         for c in CONSTANTS.keys:
-            if c == input.strip.toLower:
-                res = CONSTANTS[input.strip.toLower]
-                break getResult
-        
-        discard input.parseFloat(res)
+            if c == term:
+                res = CONSTANTS[term]
+                break evaluate
+
+        if term.parseFloat(res) == 0 and term.len > 0:
+            raise newException(ParseError, "Error parsing '" & term & "'")
+        else:
+            break evaluate
 
     return res
 
@@ -89,7 +107,6 @@ when isMainModule:
     
     setControlCHook(bye)
 
-
     var input: string
     
     while true:
@@ -100,4 +117,7 @@ when isMainModule:
         except Exception:
             bye()
 
-        echo input.evalTerm
+        try:
+            echo input.evalTerm
+        except ParseError:
+            echo getCurrentExceptionMsg()

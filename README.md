@@ -1,18 +1,26 @@
-# nim-cli-calculator
+# nimCalc
 
-Just a basic calculator exporting a function to evaluate mathematical terms for library use.
+A calculator exporting a function to evaluate basic mathematical terms
 
-### Run:
-```bash
-nim r calculator.nim
+## Types
+
+```nim
+ParseError = object of CatchableError
 ```
 
-### Compile Runnable:
-```bash
-nim c calculator.nim
+## Procs
+
+```nim
+func evalTerm(input: string): float {.extern: "evalTerm", raises: [KeyError],
+                                      tags: [].}
 ```
 
-### Create documentation:
-```bash
-nim doc calculator.nim
-```
+Evaluates the string `input` as a basic mathematical term.
+
+* Following operators can be used: `+`, `-`, `*`, `/`, `%`, `mod`, `^`, `pow`
+
+    (Where `%` and `mod` are equivalent and `^` and `pow` are equivalent)
+
+* Following constants can be used: `PI`, `E`, `TAU`
+
+* Brackets are not yet implemented but are WIP
