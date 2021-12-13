@@ -11,8 +11,8 @@ ParseError = object of CatchableError
 ## Procs
 
 ```nim
-func evalTerm(input: string): float {.extern: "evalTerm", raises: [KeyError],
-                                      tags: [].}
+func evalTerm(input: string): float {.extern: "evalTerm",
+                                      raises: [KeyError, ParseError], tags: [].}
 ```
 
 Evaluates the string `input` as a basic mathematical term.
