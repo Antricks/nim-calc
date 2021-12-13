@@ -24,3 +24,8 @@ Evaluates the string `input` as a basic mathematical term.
 * Following constants can be used: `PI`, `E`, `TAU`
 
 * Brackets are not yet implemented but are WIP
+
+## Nimble tasks
+
+* `docgen`: Generate HTML documentation
+* `runCalc`: Run calculator
