@@ -38,7 +38,8 @@ const
         "%": func(a: float, b: float): float = a mod b,
         "mod": func(a: float, b: float): float = a mod b,
         "^": func(a: float, b: float): float = a.pow(b),
-        "pow": func(a: float, b: float): float = a.pow(b)
+        "pow": func(a: float, b: float): float = a.pow(b),
+        "log": func(a: float, b: float): float = log(a, b)
     }.toTable
 
     CONSTANTS = {
@@ -52,7 +53,7 @@ func evalTerm*(input: string): float {.extern: "evalTerm".} =
     ##[
         Evaluates the string `input` as a basic mathematical term.
 
-        * Following **operators** can be used: `+`, `-`, `*`, `/`, `%`, `mod`, `^`, `pow`
+        * Following **operators** can be used: `+`, `-`, `*`, `/`, `%`, `mod`, `^`, `pow`, `log`
 
           (Where `%` and `mod` are equivalent and `^` and `pow` are equivalent)
 
